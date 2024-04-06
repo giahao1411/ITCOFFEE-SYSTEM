@@ -19,7 +19,7 @@ public class UserDao {
         DbOperations.setDataOrDelete(query, "Registered Successfully! Wait for Admin Approval!");
     }
     
-    public static  void Login(String email, String password){
+    public static  User Login(String email, String password){
         User user = null;
         try {
             String query ="Select * from user where email='"+ email +"' and password ='"+ password+ "'";
@@ -33,5 +33,6 @@ public class UserDao {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
         }
+        return user;
     }
 }

@@ -4,7 +4,11 @@
  */
 package coffeeit.system;
 
+import dao.UserDao;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+
+import model.User;
 
 /**
  *
@@ -28,8 +32,11 @@ public class Login extends javax.swing.JFrame {
         btnLogin.setEnabled(false);
     }
     
-    public void validatetion(){
-        if(!txtEmail.equals("") && !txtPassword.equals("") && txtEmail.matches(emailPattern)){
+    public void validateFields(){
+        String email = txtEmail.getText();
+        String password = txtPassword.getText();
+        
+        if(!email.equals("") && !password.equals("") && email.matches(emailPattern)){
             btnLogin.setEnabled(true);
         }
         else
@@ -54,7 +61,7 @@ public class Login extends javax.swing.JFrame {
         btnClear = new javax.swing.JButton();
         btnExit = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        btnSignup = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -75,9 +82,19 @@ public class Login extends javax.swing.JFrame {
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 330, -1, -1));
 
         txtEmail.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        txtEmail.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtEmailKeyReleased(evt);
+            }
+        });
         getContentPane().add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 280, 301, -1));
 
         txtPassword.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        txtPassword.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtPasswordKeyReleased(evt);
+            }
+        });
         getContentPane().add(txtPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 330, 301, -1));
 
         btnLogin.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -114,12 +131,16 @@ public class Login extends javax.swing.JFrame {
         jButton4.setText("Forgot Password?");
         getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 420, -1, -1));
 
-        jButton5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jButton5.setText("Signup");
-        getContentPane().add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 420, 102, -1));
+        btnSignup.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnSignup.setText("Signup");
+        btnSignup.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSignupActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnSignup, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 420, 102, -1));
 
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/first page background.PNG"))); // NOI18N
-        jLabel4.setText("jLabel4");
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         pack();
@@ -127,6 +148,24 @@ public class Login extends javax.swing.JFrame {
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
         // TODO add your handling code here:
+        String email = txtEmail.getText();
+        String password = txtPassword.getText();
+        User user = null;
+        user = UserDao.Login(email, password);
+        
+        if(user == null)
+            JOptionPane.showMessageDialog(null, "<html><b style=\"color: red\">Incorrect Username or Password</b></html>", "Message", JOptionPane.ERROR_MESSAGE);
+        else{
+            if(user.getStatus().equals("false")){
+                ImageIcon icon = new ImageIcon("src/popupicon/wait.png");
+                JOptionPane.showMessageDialog(null, "<html><b>Wait for Admin Approval</b></html>", "Message", JOptionPane.INFORMATION_MESSAGE, icon);
+                clear();
+            }
+            if(user.getStatus().equals("true")){
+                setVisible(false);
+                new Home(email).setVisible(true);
+            }
+        }
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
@@ -141,6 +180,22 @@ public class Login extends javax.swing.JFrame {
             System.exit(0);
         }
     }//GEN-LAST:event_btnExitActionPerformed
+
+    private void txtEmailKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEmailKeyReleased
+        // TODO add your handling code here
+        validateFields();
+    }//GEN-LAST:event_txtEmailKeyReleased
+
+    private void txtPasswordKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPasswordKeyReleased
+        // TODO add your handling code here:
+        validateFields();
+    }//GEN-LAST:event_txtPasswordKeyReleased
+
+    private void btnSignupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSignupActionPerformed
+        // TODO add your handling code here:
+        setVisible(false);
+        new Signup().setVisible(true);
+    }//GEN-LAST:event_btnSignupActionPerformed
 
     /**
      * @param args the command line arguments
@@ -181,8 +236,8 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JButton btnClear;
     private javax.swing.JButton btnExit;
     private javax.swing.JButton btnLogin;
+    private javax.swing.JButton btnSignup;
     private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

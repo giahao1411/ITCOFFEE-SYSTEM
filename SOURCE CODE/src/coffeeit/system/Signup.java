@@ -83,7 +83,7 @@ public class Signup extends javax.swing.JFrame {
         btnClear = new javax.swing.JButton();
         btnExit = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        btnLogin = new javax.swing.JButton();
         jLabel10 = new javax.swing.JLabel();
 
         jLabel9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/first page background.PNG"))); // NOI18N
@@ -226,9 +226,14 @@ public class Signup extends javax.swing.JFrame {
         jButton4.setText("Fogot Password ?");
         getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 540, -1, -1));
 
-        jButton5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jButton5.setText("Login");
-        getContentPane().add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 540, 75, -1));
+        btnLogin.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnLogin.setText("Login");
+        btnLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLoginActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(790, 540, 75, -1));
 
         jLabel10.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/first page background.PNG"))); // NOI18N
         jLabel10.setText("jLabel10");
@@ -315,6 +320,12 @@ public class Signup extends javax.swing.JFrame {
 
     }//GEN-LAST:event_txtAnswerKeyReleased
 
+    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
+        // TODO add your handling code here:
+        setVisible(false);
+        new Login().setVisible(true);
+    }//GEN-LAST:event_btnLoginActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -353,9 +364,9 @@ public class Signup extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClear;
     private javax.swing.JButton btnExit;
+    private javax.swing.JButton btnLogin;
     private javax.swing.JButton btnSave;
     private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
