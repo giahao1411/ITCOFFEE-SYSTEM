@@ -10,16 +10,15 @@ import model.User;
 
 import dao.UserDao;
 
-
 /**
  *
  * @author Win
  */
 public class Signup extends javax.swing.JFrame {
+
     public String emailPattern = "^[a-zA-Z0-9]+[@]+[a-zA-Z0-9]+[.]+[a-zA-Z0-9]+$";
     public String mobileNumberPattern = "^[0-9]*$";
-    
-    
+
     /**
      * Creates new form Signup
      */
@@ -27,8 +26,8 @@ public class Signup extends javax.swing.JFrame {
         initComponents();
         btnSave.setEnabled(false);
     }
-    
-    public void clear(){
+
+    public void clear() {
         txtAddress.setText("");
         txtEmail.setText("");
         txtAnswer.setText("");
@@ -38,8 +37,8 @@ public class Signup extends javax.swing.JFrame {
         txtSecurityQuestion.setText("");
         btnSave.setEnabled(false);
     }
-    
-    public void validateFields(){
+
+    public void validateFields() {
         String name = txtName.getText();
         String email = txtEmail.getText();
         String mobileNumber = txtMobileNumber.getText();
@@ -47,13 +46,15 @@ public class Signup extends javax.swing.JFrame {
         String password = txtPassword.getText();
         String securityQuestion = txtSecurityQuestion.getText();
         String answer = txtAnswer.getText();
-        
-        if(!name.equals("") && email.matches(emailPattern) && mobileNumber.matches(mobileNumberPattern) && mobileNumber.length() == 10 && !address.equals("") && !password.equals("") && !securityQuestion.equals("") && !answer.equals(""))
+
+        if (!name.equals("") && email.matches(emailPattern) && mobileNumber.matches(mobileNumberPattern) && mobileNumber.length() == 10 && !address.equals("") && !password.equals("") && !securityQuestion.equals("") && !answer.equals("")) {
             btnSave.setEnabled(true);
-        else
+        } else {
             btnSave.setEnabled(false);
+        }
 
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -224,6 +225,11 @@ public class Signup extends javax.swing.JFrame {
 
         jButton4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jButton4.setText("Fogot Password ?");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
         getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 540, -1, -1));
 
         btnLogin.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -253,8 +259,8 @@ public class Signup extends javax.swing.JFrame {
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
         // TODO add your handling code here:
         int a = JOptionPane.showConfirmDialog(null, "Do you really want to Close Application", "Select", JOptionPane.YES_NO_OPTION);
-        
-        if(a == 0){
+
+        if (a == 0) {
             System.exit(0);
         }
     }//GEN-LAST:event_btnExitActionPerformed
@@ -269,7 +275,7 @@ public class Signup extends javax.swing.JFrame {
         user.setPassword(txtPassword.getText());
         user.setSecurityQuestion(txtSecurityQuestion.getText());
         user.setAnswer(txtAnswer.getText());
-        
+
         UserDao.save(user);
         clear();
     }//GEN-LAST:event_btnSaveActionPerformed
@@ -286,37 +292,37 @@ public class Signup extends javax.swing.JFrame {
 
     private void txtEmailKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEmailKeyReleased
         // TODO add your handling code here:
-                validateFields();
+        validateFields();
 
     }//GEN-LAST:event_txtEmailKeyReleased
 
     private void txtMobileNumberKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMobileNumberKeyReleased
         // TODO add your handling code here:
-                validateFields();
+        validateFields();
 
     }//GEN-LAST:event_txtMobileNumberKeyReleased
 
     private void txtAddressKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAddressKeyReleased
         // TODO add your handling code here:
-                validateFields();
+        validateFields();
 
     }//GEN-LAST:event_txtAddressKeyReleased
 
     private void txtPasswordKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPasswordKeyReleased
         // TODO add your handling code here:
-                validateFields();
+        validateFields();
 
     }//GEN-LAST:event_txtPasswordKeyReleased
 
     private void txtSecurityQuestionKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSecurityQuestionKeyReleased
         // TODO add your handling code here:
-                validateFields();
+        validateFields();
 
     }//GEN-LAST:event_txtSecurityQuestionKeyReleased
 
     private void txtAnswerKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAnswerKeyReleased
         // TODO add your handling code here:
-                validateFields();
+        validateFields();
 
     }//GEN-LAST:event_txtAnswerKeyReleased
 
@@ -325,6 +331,12 @@ public class Signup extends javax.swing.JFrame {
         setVisible(false);
         new Login().setVisible(true);
     }//GEN-LAST:event_btnLoginActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        setVisible(false);
+        new ForgotPassword().setVisible(true);
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * @param args the command line arguments

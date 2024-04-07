@@ -19,7 +19,7 @@ public class UserDao {
         DbOperations.setDataOrDelete(query, "Registered Successfully! Wait for Admin Approval!");
     }
     
-    public static  User Login(String email, String password){
+    public static User Login(String email, String password){
         User user = null;
         try {
             String query ="Select * from user where email='"+ email +"' and password ='"+ password+ "'";
@@ -34,5 +34,32 @@ public class UserDao {
             JOptionPane.showMessageDialog(null, e);
         }
         return user;
+    }
+    
+    public static User getSecurityQuestion(String email){
+        
+        User user = null;
+        try {
+//            String query = "Update user Set password='" + user.getPassword() + "' where email='"+user.getEmail() +"' and securityQuestion='"+user.getSecurityQuestion()+"' and answer='"+user.getAnswer()+"'";
+            String query ="Select * from user where email='"+ email + "'";
+            ResultSet rs = DbOperations.getData(query);
+            while(rs.next()){
+                user = new User();
+                user.setSecurityQuestion(rs.getString("securityQuestion"));
+                user.setAnswer(rs.getString("answer"));
+            }
+            
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+
+        }
+        
+        return user;
+    }
+    
+    public static void update(String email, String newPassword){
+        String query = "Update user set password='" + newPassword + "' where email='"+email+"'";
+        DbOperations.setDataOrDelete(query, "Password Change Successfully");
     }
 }
