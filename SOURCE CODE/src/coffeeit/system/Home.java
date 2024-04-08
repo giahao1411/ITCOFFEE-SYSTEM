@@ -130,6 +130,11 @@ public class Home extends javax.swing.JFrame {
         btnVerifyUsers.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnVerifyUsers.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/verify users.png"))); // NOI18N
         btnVerifyUsers.setText("Verify users");
+        btnVerifyUsers.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVerifyUsersActionPerformed(evt);
+            }
+        });
         getContentPane().add(btnVerifyUsers, new org.netbeans.lib.awtextra.AbsoluteConstraints(980, 700, -1, -1));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/home-background-image.png"))); // NOI18N
@@ -170,6 +175,11 @@ public class Home extends javax.swing.JFrame {
         // TODO add your handling code here:
         new ViewEditDeleteProduct().setVisible(true);
     }//GEN-LAST:event_btnViewEditDeleteProductActionPerformed
+
+    private void btnVerifyUsersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerifyUsersActionPerformed
+        // TODO add your handling code here:
+        new VerifyUsers().setVisible(true);
+    }//GEN-LAST:event_btnVerifyUsersActionPerformed
 
     /**
      * @param args the command line arguments

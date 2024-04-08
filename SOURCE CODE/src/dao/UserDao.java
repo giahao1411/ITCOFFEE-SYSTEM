@@ -7,6 +7,7 @@ import com.mysql.cj.xdevapi.Result;
 import javax.swing.JOptionPane;
 import model.User;
 import java.sql.*;
+import java.util.ArrayList;
 
 /**
  *
@@ -40,7 +41,6 @@ public class UserDao {
         
         User user = null;
         try {
-//            String query = "Update user Set password='" + user.getPassword() + "' where email='"+user.getEmail() +"' and securityQuestion='"+user.getSecurityQuestion()+"' and answer='"+user.getAnswer()+"'";
             String query ="Select * from user where email='"+ email + "'";
             ResultSet rs = DbOperations.getData(query);
             while(rs.next()){
@@ -61,5 +61,37 @@ public class UserDao {
     public static void update(String email, String newPassword){
         String query = "Update user set password='" + newPassword + "' where email='"+email+"'";
         DbOperations.setDataOrDelete(query, "Password Change Successfully");
+    }
+    
+    
+    public static ArrayList<User> getAllRecords(String email){
+        ArrayList<User> arrayList = new ArrayList<>();
+        
+        try {
+            String query = "Select * from user where email like '%" + email + "%'";
+            ResultSet rs = DbOperations.getData(query);
+            while(rs.next()){
+                User user = new User();
+                user.setAddress(rs.getString("address"));
+                user.setId(rs.getInt("id"));
+                user.setName(rs.getString("name"));
+                user.setMobileNumber(rs.getString("mobileNumber"));
+                user.setEmail(rs.getString("email"));
+                user.setSecurityQuestion(rs.getString("securityQuestion"));
+                user.setStatus(rs.getString("status"));
+                
+                arrayList.add(user);
+            }
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+        return arrayList;
+    }
+    
+    public static void changeStatus(String email, String status){
+        String query  = "Update user set status='" + status +"' where email ='" + email +"'";
+        
+        DbOperations.setDataOrDelete(query, "Status change Successfully!");
     }
 }
