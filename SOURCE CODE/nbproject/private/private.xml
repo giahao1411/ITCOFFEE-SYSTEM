@@ -3,10 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/E:/TDTU/Ton-Duc-Thang-University-Lab/semeter%204/Software-Enginering/ITCOFFEE-SYSTEM/SOURCE%20CODE/src/coffeeit/system/Home.java</file>
-            <file>file:/E:/TDTU/Ton-Duc-Thang-University-Lab/semeter%204/Software-Enginering/ITCOFFEE-SYSTEM/SOURCE%20CODE/src/coffeeit/system/Login.java</file>
-            <file>file:/E:/TDTU/Ton-Duc-Thang-University-Lab/semeter%204/Software-Enginering/ITCOFFEE-SYSTEM/SOURCE%20CODE/src/dao/CategoryDao.java</file>
-            <file>file:/E:/TDTU/Ton-Duc-Thang-University-Lab/semeter%204/Software-Enginering/ITCOFFEE-SYSTEM/SOURCE%20CODE/src/coffeeit/system/ManageCategory.java</file>
+            <file>file:/E:/TDTU/Ton-Duc-Thang-University-Lab/semeter%204/Software-Enginering/ITCOFFEE-SYSTEM/SOURCE%20CODE/src/coffeeit/system/AddNewProduct.java</file>
+            <file>file:/E:/TDTU/Ton-Duc-Thang-University-Lab/semeter%204/Software-Enginering/ITCOFFEE-SYSTEM/SOURCE%20CODE/src/coffeeit/system/ViewEditDeleteProduct.java</file>
         </group>
     </open-files>
 </project-private>
