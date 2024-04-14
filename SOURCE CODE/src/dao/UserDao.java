@@ -94,4 +94,18 @@ public class UserDao {
         
         DbOperations.setDataOrDelete(query, "Status change Successfully!");
     }
+    
+    public static String getNameByEmail(String email){
+        String name = "";
+        try {
+            ResultSet rs =DbOperations.getData("select * from user where email='" +email+ "'");
+            if(rs.next()){
+                name = rs.getString(2);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+        
+        return name;
+    }
 }

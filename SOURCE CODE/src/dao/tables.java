@@ -20,10 +20,14 @@ public class tables {
             String categoryTable = "Create table category (id int AUTO_INCREMENT primary key, name varchar(200))";
             
             String productTable = "create table product(id int AUTO_INCREMENT primary key, name varchar(200), category varchar(200), price varchar(200))";
+            
+            String billTable = "create table bill(id int primary key, name varchar(200), mobileNumber varchar(200), email varchar(200), date varchar(50), total varchar(200), createBy varchar(200))";
 //            DbOperations.setDataOrDelete(userTable, "User Table Created Successfully");
 //            DbOperations.setDataOrDelete(adminDetails, "Admin Details Added Successfully");
 //            DbOperations.setDataOrDelete(categoryTable, "Category Table created Successfully");
-            DbOperations.setDataOrDelete(productTable, "Product Table Created Successfully");
+//            DbOperations.setDataOrDelete(productTable, "Product Table Created Successfully");
+            DbOperations.setDataOrDelete(billTable, "Bill Table Created Successfully");
+
 
         }
         catch(Exception e){

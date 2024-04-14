@@ -15,7 +15,7 @@ import model.User;
  * @author Win
  */
 public class Login extends javax.swing.JFrame {
-    
+
     public String emailPattern = "^[a-zA-Z0-9]+[@]+[a-zA-Z0-9]+[.]+[a-zA-Z0-9]+$";
 
     /**
@@ -25,22 +25,22 @@ public class Login extends javax.swing.JFrame {
         initComponents();
         btnLogin.setEnabled(false);
     }
-    
-    public void clear(){
+
+    public void clear() {
         txtEmail.setText("");
         txtPassword.setText("");
         btnLogin.setEnabled(false);
     }
-    
-    public void validateFields(){
+
+    public void validateFields() {
         String email = txtEmail.getText();
         String password = txtPassword.getText();
-        
-        if(!email.equals("") && !password.equals("") && email.matches(emailPattern)){
+
+        if (!email.equals("") && !password.equals("") && email.matches(emailPattern)) {
             btnLogin.setEnabled(true);
-        }
-        else
+        } else {
             btnLogin.setEnabled(false);
+        }
     }
 
     /**
@@ -157,16 +157,16 @@ public class Login extends javax.swing.JFrame {
         String password = txtPassword.getText();
         User user = null;
         user = UserDao.Login(email, password);
-        
-        if(user == null)
+
+        if (user == null)
             JOptionPane.showMessageDialog(null, "<html><b style=\"color: red\">Incorrect Username or Password</b></html>", "Message", JOptionPane.ERROR_MESSAGE);
-        else{
-            if(user.getStatus().equals("false")){
+        else {
+            if (user.getStatus().equals("false")) {
                 ImageIcon icon = new ImageIcon("src/popupicon/wait.png");
                 JOptionPane.showMessageDialog(null, "<html><b>Wait for Admin Approval</b></html>", "Message", JOptionPane.INFORMATION_MESSAGE, icon);
                 clear();
             }
-            if(user.getStatus().equals("true")){
+            if (user.getStatus().equals("true")) {
                 setVisible(false);
                 new Home(email).setVisible(true);
             }
@@ -181,7 +181,7 @@ public class Login extends javax.swing.JFrame {
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
         // TODO add your handling code here:
         int a = JOptionPane.showConfirmDialog(null, "Do you really want to close Application", "Select", JOptionPane.YES_NO_OPTION);
-        if(a == 0){
+        if (a == 0) {
             System.exit(0);
         }
     }//GEN-LAST:event_btnExitActionPerformed

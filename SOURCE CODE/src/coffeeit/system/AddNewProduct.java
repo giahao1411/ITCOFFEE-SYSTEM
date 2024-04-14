@@ -176,7 +176,7 @@ public class AddNewProduct extends javax.swing.JFrame {
         Product product = new Product();
         product.setName(txtName.getText());
         product.setCategory(cbCategory.getSelectedItem().toString());
-        product.setPrice(txtPrice.getText());
+        product.setPrice((txtPrice.getText()));
         ProductDao.save(product);
         setVisible(false);
         new AddNewProduct().setVisible(true);

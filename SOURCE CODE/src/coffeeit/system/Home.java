@@ -42,7 +42,7 @@ public class Home extends javax.swing.JFrame {
     private void initComponents() {
 
         btnLogout = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnPlaceOrder = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
@@ -67,10 +67,15 @@ public class Home extends javax.swing.JFrame {
         });
         getContentPane().add(btnLogout, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 10, -1, -1));
 
-        jButton2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/place order.png"))); // NOI18N
-        jButton2.setText("Place Order");
-        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 10, -1, -1));
+        btnPlaceOrder.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnPlaceOrder.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/place order.png"))); // NOI18N
+        btnPlaceOrder.setText("Place Order");
+        btnPlaceOrder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPlaceOrderActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnPlaceOrder, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 10, -1, -1));
 
         jButton3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/View Bills & Order Placed Details.png"))); // NOI18N
@@ -181,6 +186,12 @@ public class Home extends javax.swing.JFrame {
         new VerifyUsers().setVisible(true);
     }//GEN-LAST:event_btnVerifyUsersActionPerformed
 
+    private void btnPlaceOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlaceOrderActionPerformed
+        // TODO add your handling code here:
+        setVisible(false);
+        new PlaceOrder(email).setVisible(true);
+    }//GEN-LAST:event_btnPlaceOrderActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -221,9 +232,9 @@ public class Home extends javax.swing.JFrame {
     private javax.swing.JButton btnExit;
     private javax.swing.JButton btnLogout;
     private javax.swing.JButton btnNewProduct;
+    private javax.swing.JButton btnPlaceOrder;
     private javax.swing.JButton btnVerifyUsers;
     private javax.swing.JButton btnViewEditDeleteProduct;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
