@@ -4,6 +4,7 @@
  */
 package common;
 
+import java.awt.Desktop;
 import javax.swing.JOptionPane;
 import java.io.File;
 /**
@@ -14,18 +15,14 @@ public class OpenPdf {
     
     public static void openById(String id){
         try {
-            if((new File("E:\\" + id + ".pdf")).exists()){
-                Process p = Runtime
-                        .getRuntime()
-                        .exec("rundll32 url.dll, FileProtocolHandler E:\\" + id +"pdf");
-                
-            }
-            else{
-                JOptionPane.showMessageDialog(null, "File is not Exists");
-            }
-            
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e);
+        File file = new File("E:\\" + id + ".pdf");
+        if (file.exists()) {
+            Desktop.getDesktop().open(file);
+        } else {
+            JOptionPane.showMessageDialog(null, "File does not exist");
         }
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, e);
+    }
     }
 }

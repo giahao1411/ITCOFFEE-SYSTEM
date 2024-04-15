@@ -7,6 +7,7 @@ package coffeeit.system;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.Barcode128;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -60,6 +61,7 @@ public class PlaceOrder extends javax.swing.JFrame {
         txtBarCode.setEditable(false);
         btnRemove.setEnabled(false);
         btnPay.setEnabled(false);
+        btnReceipt.setEnabled(false);
 
         MenuDisplayDao menuDisplay = new MenuDisplayDao();
         JScrollPane mainPanel = menuDisplay.getMainPanel(new MenuDisplayDao.ProductPanelClickListener() {
@@ -89,6 +91,7 @@ public class PlaceOrder extends javax.swing.JFrame {
                         dtm.setValueAt(Integer.toString(quantity), rowIndex, 2);
                         dtm.setValueAt(decimalFormat.format(amount), rowIndex, 3);
                     }
+                    btnReceipt.setEnabled(true);
 
                     ItemCost();
 
@@ -462,7 +465,8 @@ public class PlaceOrder extends javax.swing.JFrame {
                 .addContainerGap(14, Short.MAX_VALUE))
         );
 
-        txtBarCode.setFont(new java.awt.Font("C39HrP24DlTt", 0, 36)); // NOI18N
+        txtBarCode.setFont(new java.awt.Font("Code 128", 1, 36)); // NOI18N
+        txtBarCode.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -552,6 +556,7 @@ public class PlaceOrder extends javax.swing.JFrame {
         txtCustomerName.setText("");
         txtEmail.setText("");
         txtPhoneNumber.setText("");
+        btnReceipt.setEnabled(false);
     }
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
         // TODO add your handling code here:
@@ -591,10 +596,11 @@ public class PlaceOrder extends javax.swing.JFrame {
 
             Font font = FontFactory.getFont(FontFactory.HELVETICA, 20);
             font.setStyle(Font.BOLD);
-
-            String fontPath = "C:\\Users\\Win\\Downloads\\c39hrp24dltt\\c39hrp24dltt.ttf";
-            BaseFont baseFont = BaseFont.createFont(fontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-            Font font1 = new Font(baseFont, 20);
+            
+           
+//            String fontPath = "../fonts/code128.ttf";
+//            BaseFont baseFont = BaseFont.createFont(fontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+//            Font font1 = new Font(baseFont, 20);
 
             Paragraph cafeName = new Paragraph("IT Coffee System\n\n", font);
 
@@ -630,8 +636,13 @@ public class PlaceOrder extends javax.swing.JFrame {
             document.add(tb1);
 
             document.add(startLine);
-
-            Paragraph barcode = new Paragraph(txtBarCode.getText(), font1);
+            
+            
+            Barcode128 b = new Barcode128();
+            b.setCode(txtBarCode.getText());
+            
+            Paragraph barcode = new Paragraph(b.getCode());
+            
             barcode.setAlignment(Paragraph.ALIGN_CENTER);
             document.add(barcode);
 
@@ -699,9 +710,9 @@ public class PlaceOrder extends javax.swing.JFrame {
 
         String iTotal = decimalFormat.format(sum + cTax);
         txtTotal.setText(iTotal);
-
+        
         String barCode = String.format("Total is %.2f", sum + cTax);
-        txtBarCode.setText(barCode);
+        txtBarCode.setText("522H0064");
     }
 
     public void change() {
