@@ -4,10 +4,13 @@
  */
 package coffeeit.system;
 
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.Barcode128;
+import com.itextpdf.text.pdf.BarcodeEAN;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -42,6 +45,7 @@ public class PlaceOrder extends javax.swing.JFrame {
     public String mobileNumberPattern = "^[0-9]*$";
     public int productTotal = 0;
     private DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
+    private Image imageBarcode128 = null;
 
     /**
      * Creates new form PlaceOrder
@@ -58,7 +62,6 @@ public class PlaceOrder extends javax.swing.JFrame {
         txtTax.setEditable(false);
         txtTotal.setEditable(false);
         txtChange.setEditable(false);
-        txtBarCode.setEditable(false);
         btnRemove.setEnabled(false);
         btnPay.setEnabled(false);
         btnReceipt.setEnabled(false);
@@ -178,7 +181,7 @@ public class PlaceOrder extends javax.swing.JFrame {
         btnReceipt = new javax.swing.JButton();
         btnRemove = new javax.swing.JButton();
         btnExit = new javax.swing.JButton();
-        txtBarCode = new javax.swing.JTextField();
+        labelBarCode = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -465,8 +468,8 @@ public class PlaceOrder extends javax.swing.JFrame {
                 .addContainerGap(14, Short.MAX_VALUE))
         );
 
-        txtBarCode.setFont(new java.awt.Font("Code 128", 1, 36)); // NOI18N
-        txtBarCode.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        labelBarCode.setBackground(new java.awt.Color(255, 255, 255));
+        labelBarCode.setOpaque(true);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -484,9 +487,9 @@ public class PlaceOrder extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 344, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtBarCode, javax.swing.GroupLayout.PREFERRED_SIZE, 344, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE)
+                            .addComponent(labelBarCode, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -499,7 +502,7 @@ public class PlaceOrder extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 490, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtBarCode, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(labelBarCode, javax.swing.GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE))
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
@@ -552,7 +555,6 @@ public class PlaceOrder extends javax.swing.JFrame {
         txtTotal.setText("");
         txtSubTotal.setText("");
         txtCash.setText("");
-        txtBarCode.setText("");
         txtCustomerName.setText("");
         txtEmail.setText("");
         txtPhoneNumber.setText("");
@@ -596,11 +598,6 @@ public class PlaceOrder extends javax.swing.JFrame {
 
             Font font = FontFactory.getFont(FontFactory.HELVETICA, 20);
             font.setStyle(Font.BOLD);
-            
-           
-//            String fontPath = "../fonts/code128.ttf";
-//            BaseFont baseFont = BaseFont.createFont(fontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
-//            Font font1 = new Font(baseFont, 20);
 
             Paragraph cafeName = new Paragraph("IT Coffee System\n\n", font);
 
@@ -636,15 +633,14 @@ public class PlaceOrder extends javax.swing.JFrame {
             document.add(tb1);
 
             document.add(startLine);
-            
-            
-            Barcode128 b = new Barcode128();
-            b.setCode(txtBarCode.getText());
-            
-            Paragraph barcode = new Paragraph(b.getCode());
-            
-            barcode.setAlignment(Paragraph.ALIGN_CENTER);
-            document.add(barcode);
+
+            com.itextpdf.text.Image itextBarcodeImage = com.itextpdf.text.Image.getInstance(imageBarcode128, null);
+
+// Center align the image
+            itextBarcodeImage.setAlignment(Element.ALIGN_CENTER);
+
+// Add the barcode image to the document
+            document.add(itextBarcodeImage);
 
             Paragraph thankMsg = new Paragraph("Thank you, Please visit Again");
             thankMsg.setAlignment(Paragraph.ALIGN_CENTER);
@@ -668,7 +664,7 @@ public class PlaceOrder extends javax.swing.JFrame {
         if (rmItem >= 0) {
             model.removeRow(rmItem);
         }
-        
+
         btnRemove.setEnabled(false);
         ItemCost();
     }//GEN-LAST:event_btnRemoveActionPerformed
@@ -676,7 +672,7 @@ public class PlaceOrder extends javax.swing.JFrame {
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         // TODO add your handling code here:
         int count = jTable1.getRowCount();
-        if(count == 0)
+        if (count == 0)
             btnRemove.setEnabled(false);
         else
             btnRemove.setEnabled(true);
@@ -684,10 +680,10 @@ public class PlaceOrder extends javax.swing.JFrame {
 
     private void txtCashKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCashKeyReleased
         // TODO add your handling code here:
-        if(!txtCash.getText().equals("")){
+        if (!txtCash.getText().equals("")) {
             btnPay.setEnabled(true);
 
-        }else{
+        } else {
             btnPay.setEnabled(false);
         }
     }//GEN-LAST:event_txtCashKeyReleased
@@ -699,7 +695,6 @@ public class PlaceOrder extends javax.swing.JFrame {
             sum += Double.parseDouble(jTable1.getValueAt(i, 3).toString().replace(",", ""));
         }
 
-
         Double cTax = (sum * 3.9) / 100;
 
         String iTaxTotal = decimalFormat.format(cTax);
@@ -710,9 +705,23 @@ public class PlaceOrder extends javax.swing.JFrame {
 
         String iTotal = decimalFormat.format(sum + cTax);
         txtTotal.setText(iTotal);
-        
-        String barCode = String.format("Total is %.2f", sum + cTax);
-        txtBarCode.setText("522H0064");
+
+        String barCode = decimalFormat.format( sum + cTax);
+        Barcode128 barcode128 = new Barcode128();
+//            barcode128.setCodeType(Barcode128.CODE_A); 
+        barcode128.setCode(barCode);
+        imageBarcode128 = barcode128.createAwtImage(Color.BLACK, Color.WHITE);
+        ImageIcon imageIconBarcode128 = new ImageIcon(imageBarcode128);
+        labelBarCode.setIcon(resizePic(imageIconBarcode128));
+        labelBarCode.setHorizontalAlignment(JLabel.CENTER);
+        labelBarCode.setVerticalAlignment(JLabel.CENTER);
+    }
+
+    public ImageIcon resizePic(ImageIcon myImg) {
+        Image img = myImg.getImage().getScaledInstance(labelBarCode.getWidth(), labelBarCode.getHeight(), Image.SCALE_SMOOTH);
+        ImageIcon myPicture = new ImageIcon(img);
+
+        return myPicture;
     }
 
     public void change() {
@@ -798,7 +807,7 @@ public class PlaceOrder extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextField txtBarCode;
+    private javax.swing.JLabel labelBarCode;
     private javax.swing.JTextField txtCash;
     private javax.swing.JTextField txtChange;
     private javax.swing.JTextField txtCustomerName;
