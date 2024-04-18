@@ -44,7 +44,7 @@ public class PlaceOrder extends javax.swing.JFrame {
     public String emailPattern = "^[a-zA-Z0-9]+[@]+[a-zA-Z0-9]+[.]+[a-zA-Z0-9]+$";
     public String mobileNumberPattern = "^[0-9]*$";
     public int productTotal = 0;
-    private DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
+    private DecimalFormat decimalFormat = new DecimalFormat("#,##0");
     private Image imageBarcode128 = null;
 
     /**
@@ -328,6 +328,11 @@ public class PlaceOrder extends javax.swing.JFrame {
 
         cdMethodPay.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         cdMethodPay.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cash", "Momo" }));
+        cdMethodPay.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cdMethodPayItemStateChanged(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel16Layout = new javax.swing.GroupLayout(jPanel16);
         jPanel16.setLayout(jPanel16Layout);
@@ -542,8 +547,7 @@ public class PlaceOrder extends javax.swing.JFrame {
         if (cdMethodPay.getSelectedItem().equals("Cash")) {
             change();
         } else {
-            txtChange.setText("");
-            txtCash.setText("");
+            new reditPayment(txtTotal.getText().replace(",", "")).setVisible(true);
         }
     }//GEN-LAST:event_btnPayActionPerformed
 
@@ -680,13 +684,13 @@ public class PlaceOrder extends javax.swing.JFrame {
 
     private void txtCashKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCashKeyReleased
         // TODO add your handling code here:
-        if (!txtCash.getText().equals("")) {
-            btnPay.setEnabled(true);
-
-        } else {
-            btnPay.setEnabled(false);
-        }
+        validateField();
     }//GEN-LAST:event_txtCashKeyReleased
+
+    private void cdMethodPayItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cdMethodPayItemStateChanged
+        // TODO add your handling code here:
+                validateField();
+    }//GEN-LAST:event_cdMethodPayItemStateChanged
 
     public void ItemCost() {
         double sum = 0;
@@ -706,7 +710,7 @@ public class PlaceOrder extends javax.swing.JFrame {
         String iTotal = decimalFormat.format(sum + cTax);
         txtTotal.setText(iTotal);
 
-        String barCode = decimalFormat.format( sum + cTax);
+        String barCode = decimalFormat.format(sum + cTax);
         Barcode128 barcode128 = new Barcode128();
 //            barcode128.setCodeType(Barcode128.CODE_A); 
         barcode128.setCode(barCode);
@@ -736,8 +740,11 @@ public class PlaceOrder extends javax.swing.JFrame {
     public void validateField() {
         String mobileNumber = txtPhoneNumber.getText();
         String emaiCustommer = txtEmail.getText();
-        if ((!mobileNumber.equals("") && !mobileNumber.matches(mobileNumberPattern)) || (!emaiCustommer.equals("") && !emaiCustommer.matches(emailPattern))) {
-            btnPay.setEnabled(false);
+
+        if (cdMethodPay.getSelectedItem().equals("Cash")) {
+            if ((!mobileNumber.equals("") && !mobileNumber.matches(mobileNumberPattern)) || (!emaiCustommer.equals("") && !emaiCustommer.matches(emailPattern))) {
+                btnPay.setEnabled(false);
+            }
         } else {
             btnPay.setEnabled(true);
         }
