@@ -4,7 +4,7 @@
  */
 package coffeeit.system;
 
-import dao.UserDao;
+import controler.UserControler;
 import model.User;
 
 /**
@@ -169,7 +169,7 @@ public class ChangeSecurityQuestion extends javax.swing.JFrame {
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
         // TODO add your handling code here:
-        User user = UserDao.getSecurityQuestion(userEmail);
+        User user = UserControler.getSecurityQuestion(userEmail);
         txtOldSQ.setText(user.getSecurityQuestion());
     }//GEN-LAST:event_formComponentShown
 
@@ -199,7 +199,7 @@ public class ChangeSecurityQuestion extends javax.swing.JFrame {
         String securityQuestion = txtNewSQ.getText();
         String answer = txtNewAns.getText();
         
-        UserDao.changeSecurityQuestion(userEmail, password, securityQuestion, answer);
+        UserControler.changeSecurityQuestion(userEmail, password, securityQuestion, answer);
         clear();
     }//GEN-LAST:event_btnUpdateActionPerformed
 
@@ -216,37 +216,7 @@ public class ChangeSecurityQuestion extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ChangeSecurityQuestion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ChangeSecurityQuestion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ChangeSecurityQuestion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ChangeSecurityQuestion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ChangeSecurityQuestion().setVisible(true);
-            }
-        });
-    }
+   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClear;

@@ -15,10 +15,14 @@ import java.text.DecimalFormat;
  */
 public class ProductDao {
     public static void save(Product product){
+        if(getProductByname(product.getName()) != null){
+                JOptionPane.showMessageDialog(null, "The product was exist!");
+                return;
+            }
         try {
             double number = Double.parseDouble(product.getPrice());
             DecimalFormat decimalFormat = new DecimalFormat("#,##0");
-        String query = "INSERT INTO product (name, category, price) VALUES ('" + product.getName() + "', '" + product.getCategory() + "', '" + decimalFormat.format(number)  + "')";
+        String query = "INSERT INTO product (name, category, price, img) VALUES ('" + product.getName() + "', '" + product.getCategory() + "', '" + decimalFormat.format(number)  + "', '" + product.getImg() + "')";
         DbOperations.setDataOrDelete(query, "Product Added Successfully!");
             
         } catch (Exception e) {
@@ -39,7 +43,7 @@ public class ProductDao {
                 product.setName(rs.getString("name"));
                 product.setCategory(rs.getString("category"));
                 product.setPrice(rs.getString("price"));
-                
+                product.setImg(rs.getString("img"));
                 arrayList.add(product);
             }
         } catch (Exception e) {
@@ -50,6 +54,11 @@ public class ProductDao {
     
     
     public static void update(Product product){
+        if(getProductByname(product.getName()) != null){
+                JOptionPane.showMessageDialog(null, "The product was exist!");
+                return;
+            }
+        
         String query = "update product set name='" + product.getName() +"',category='" + product.getCategory()+"',price='" + product.getPrice()+"' where id ='" + product.getId() + "'";
         DbOperations.setDataOrDelete(query, "Product updated Successfully!");
     }
@@ -99,18 +108,19 @@ public class ProductDao {
     }
     
     public static Product getProductByname(String name){
-        Product product = new Product();
         try {
+            Product product = new Product();
             ResultSet rs =DbOperations.getData("select * from product where name='" +name+ "'");
             while(rs.next()){
                 product.setName(rs.getString(2));
                 product.setCategory(rs.getString(3));
                 product.setPrice(rs.getString(4));
+                return product;
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
         }
         
-        return product;
+        return null;
     }
 }

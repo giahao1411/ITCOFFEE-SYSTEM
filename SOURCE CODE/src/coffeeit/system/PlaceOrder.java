@@ -4,18 +4,15 @@
  */
 package coffeeit.system;
 
-import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.Barcode128;
-import com.itextpdf.text.pdf.BarcodeEAN;
-import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import common.OpenPdf;
-import dao.BillDao;
+import controler.BillControler;
 import javax.swing.*;
 import java.awt.*;
 import java.text.SimpleDateFormat;
@@ -23,11 +20,10 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import dao.MenuDisplayDao;
-import dao.UserDao;
+import controler.UserControler;
 import java.io.FileOutputStream;
 import java.text.DecimalFormat;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 import model.Bill;
 import model.Product;
 
@@ -39,7 +35,7 @@ public class PlaceOrder extends javax.swing.JFrame {
 
     public String userEmail;
     public int grandTotal = 0;
-    public int billId = Integer.parseInt(BillDao.getId());
+    public int billId = Integer.parseInt(BillControler.getId());
     public int productPrice = 0;
     public String emailPattern = "^[a-zA-Z0-9]+[@]+[a-zA-Z0-9]+[.]+[a-zA-Z0-9]+$";
     public String mobileNumberPattern = "^[0-9]*$";
@@ -74,7 +70,6 @@ public class PlaceOrder extends javax.swing.JFrame {
                 try {
 
                     double priceOfItem = Double.parseDouble(product.getPrice().replace(",", ""));
-
                     DefaultTableModel dtm = (DefaultTableModel) jTable1.getModel();
 
                     int rowIndex = -1;
@@ -94,9 +89,10 @@ public class PlaceOrder extends javax.swing.JFrame {
                         dtm.setValueAt(Integer.toString(quantity), rowIndex, 2);
                         dtm.setValueAt(decimalFormat.format(amount), rowIndex, 3);
                     }
-                    btnReceipt.setEnabled(true);
 
                     ItemCost();
+                    validateField();
+
 
                 } catch (NumberFormatException e) {
                     // Handle parsing error gracefully
@@ -223,8 +219,26 @@ public class PlaceOrder extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel5.setText("Email:");
         jPanel3.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(26, 274, -1, -1));
+
+        txtCustomerName.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtCustomerNameKeyReleased(evt);
+            }
+        });
         jPanel3.add(txtCustomerName, new org.netbeans.lib.awtextra.AbsoluteConstraints(26, 132, 170, -1));
+
+        txtPhoneNumber.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtPhoneNumberKeyReleased(evt);
+            }
+        });
         jPanel3.add(txtPhoneNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(26, 218, 170, -1));
+
+        txtEmail.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtEmailKeyReleased(evt);
+            }
+        });
         jPanel3.add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 300, 160, -1));
 
         jPanel4.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
@@ -327,7 +341,7 @@ public class PlaceOrder extends javax.swing.JFrame {
         });
 
         cdMethodPay.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
-        cdMethodPay.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cash", "Momo" }));
+        cdMethodPay.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cash", "QR Banking" }));
         cdMethodPay.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 cdMethodPayItemStateChanged(evt);
@@ -533,12 +547,11 @@ public class PlaceOrder extends javax.swing.JFrame {
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
         // TODO add your handling code here:
         setVisible(false);
-        new Home().setVisible(true);
     }//GEN-LAST:event_btnExitActionPerformed
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
         // TODO add your handling code here:
-        billId = Integer.parseInt(BillDao.getId());
+        billId = Integer.parseInt(BillControler.getId());
         ItemCost();
     }//GEN-LAST:event_formComponentShown
 
@@ -549,9 +562,11 @@ public class PlaceOrder extends javax.swing.JFrame {
         } else {
             new reditPayment(txtTotal.getText().replace(",", "")).setVisible(true);
         }
+         btnReceipt.setEnabled(true);
     }//GEN-LAST:event_btnPayActionPerformed
 
     private void clear() {
+        billId = Integer.parseInt(BillControler.getId());
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0);
         txtChange.setText("");
@@ -563,6 +578,7 @@ public class PlaceOrder extends javax.swing.JFrame {
         txtEmail.setText("");
         txtPhoneNumber.setText("");
         btnReceipt.setEnabled(false);
+        btnPay.setEnabled(false);
     }
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
         // TODO add your handling code here:
@@ -580,6 +596,9 @@ public class PlaceOrder extends javax.swing.JFrame {
         String date = txtDate.getText();
         String time = txtTime.getText();
         String createBy = userEmail;
+        
+        String paymentMethod = cdMethodPay.getSelectedItem().equals("Cash")? "\nPayment methods: " + cdMethodPay.getSelectedItem() + " Taking: " + decimalFormat.format(Integer.parseInt(txtCash.getText())) + " Returning: " + txtChange.getText() : "\nPayment methods: " + cdMethodPay.getSelectedItem();
+        String customerDetails = txtCustomerName.getText().equals("") ? "Custommer details: Custommer tails" :  "Custommer details:" + txtCustomerName.getText() + " " + txtEmail.getText();
 
         Bill bill = new Bill();
         bill.setId(billId);
@@ -590,7 +609,7 @@ public class PlaceOrder extends javax.swing.JFrame {
         bill.setTotal(txtTotal.getText());
         bill.setCreateBy(createBy);
 
-        BillDao.save(bill);
+        BillControler.save(bill);
 
         String path = "E:\\";
 
@@ -607,8 +626,9 @@ public class PlaceOrder extends javax.swing.JFrame {
 
             cafeName.setAlignment(Paragraph.ALIGN_CENTER);
             document.add(cafeName);
+            
 
-            Paragraph header = new Paragraph("94, Hamlet 1, Hoa Hiep Ward, Minh Hoa Commune, Dau Tieng District, Binh Duong Province\nHotline: 0357853366\nCASHIER: " + UserDao.getNameByEmail(userEmail) + "\n[ENT]\t" + date.split(",")[1] + " " + time);
+            Paragraph header = new Paragraph("94, Hamlet 1, Hoa Hiep Ward, Minh Hoa Commune, Dau Tieng District, Binh Duong Province\nHotline: 0357853366\nCASHIER: " + UserControler.getNameByEmail(userEmail) + "\n[ENT]\t" + date.split(",")[1] + " " + time + "\n" + customerDetails  + paymentMethod);
             document.add(header);
 
             Paragraph startLine = new Paragraph("----------------------------------------------------------------------------------------------------------------------------------\n");
@@ -633,6 +653,11 @@ public class PlaceOrder extends javax.swing.JFrame {
                 tb1.addCell(q);
 
             }
+            
+            tb1.addCell("");
+            tb1.addCell("");
+            tb1.addCell("Total");
+            tb1.addCell(txtTotal.getText());
 
             document.add(tb1);
 
@@ -689,8 +714,26 @@ public class PlaceOrder extends javax.swing.JFrame {
 
     private void cdMethodPayItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cdMethodPayItemStateChanged
         // TODO add your handling code here:
-                validateField();
+        validateField();
     }//GEN-LAST:event_cdMethodPayItemStateChanged
+
+    private void txtCustomerNameKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCustomerNameKeyReleased
+        // TODO add your handling code here:
+        validateField();
+
+    }//GEN-LAST:event_txtCustomerNameKeyReleased
+
+    private void txtPhoneNumberKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPhoneNumberKeyReleased
+        // TODO add your handling code here:
+        validateField();
+
+    }//GEN-LAST:event_txtPhoneNumberKeyReleased
+
+    private void txtEmailKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEmailKeyReleased
+        // TODO add your handling code here:
+        validateField();
+
+    }//GEN-LAST:event_txtEmailKeyReleased
 
     public void ItemCost() {
         double sum = 0;
@@ -710,10 +753,9 @@ public class PlaceOrder extends javax.swing.JFrame {
         String iTotal = decimalFormat.format(sum + cTax);
         txtTotal.setText(iTotal);
 
-        String barCode = decimalFormat.format(sum + cTax);
         Barcode128 barcode128 = new Barcode128();
 //            barcode128.setCodeType(Barcode128.CODE_A); 
-        barcode128.setCode(barCode);
+        barcode128.setCode(String.valueOf(billId));
         imageBarcode128 = barcode128.createAwtImage(Color.BLACK, Color.WHITE);
         ImageIcon imageIconBarcode128 = new ImageIcon(imageBarcode128);
         labelBarCode.setIcon(resizePic(imageIconBarcode128));
@@ -734,56 +776,51 @@ public class PlaceOrder extends javax.swing.JFrame {
         double total = Double.parseDouble(txtTotal.getText().replace(",", ""));
 
         double change = cash - total;
+        if (change < 0) {
+            JOptionPane.showMessageDialog(null, "Not Enough!");
+            btnPay.setEnabled(false);
+            btnReceipt.setEnabled(false);
+            txtCash.setText("");
+            return;
+        }
         txtChange.setText(decimalFormat.format(change));
     }
 
     public void validateField() {
         String mobileNumber = txtPhoneNumber.getText();
         String emaiCustommer = txtEmail.getText();
+        int count = jTable1.getRowCount();
+
+        if (count == 0) {
+            btnPay.setEnabled(false);
+            btnReceipt.setEnabled(false);
+            return;
+        } else if (!txtCustomerName.getText().equals("")) {
+            if (!(!mobileNumber.equals("") && mobileNumber.matches(mobileNumberPattern) && !emaiCustommer.equals("") && emaiCustommer.matches(emailPattern))) {
+                btnPay.setEnabled(false);
+                btnReceipt.setEnabled(false);
+
+                return;
+            }
+        }
 
         if (cdMethodPay.getSelectedItem().equals("Cash")) {
-            if ((!mobileNumber.equals("") && !mobileNumber.matches(mobileNumberPattern)) || (!emaiCustommer.equals("") && !emaiCustommer.matches(emailPattern))) {
+            if (txtCash.getText().equals("")) {
                 btnPay.setEnabled(false);
+                btnReceipt.setEnabled(false);
+
+            } else {
+                btnPay.setEnabled(true);
             }
         } else {
             btnPay.setEnabled(true);
         }
+
     }
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(PlaceOrder.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(PlaceOrder.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(PlaceOrder.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(PlaceOrder.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new PlaceOrder().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClear;

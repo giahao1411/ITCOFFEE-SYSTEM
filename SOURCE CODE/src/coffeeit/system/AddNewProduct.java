@@ -4,19 +4,20 @@
  */
 package coffeeit.system;
 
-import dao.CategoryDao;
-import dao.ProductDao;
-import java.awt.image.BufferedImage;
+
+import controler.CategoryControler;
+import controler.ProductControler;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
-import javax.swing.JTree;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import model.Category;
 import model.Product;
 import java.awt.Image;
+import java.io.IOException;
+import java.nio.file.*;
 
 /**
  *
@@ -28,7 +29,7 @@ public class AddNewProduct extends javax.swing.JFrame {
      * Creates new form AddNewProduct
      */
     
-    String imagePath = null;
+    String imagePath = "product null.png";
     public AddNewProduct() {
         initComponents();
         btnSave.setEnabled(false);
@@ -187,7 +188,7 @@ public class AddNewProduct extends javax.swing.JFrame {
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
         // TODO add your handling code here:
-        ArrayList<Category> list = CategoryDao.getAllRecords();
+        ArrayList<Category> list = CategoryControler.getAllRecords();
         Iterator<Category> itr = list.iterator();
         while (itr.hasNext()) {
             Category categoryObj = itr.next();
@@ -202,7 +203,9 @@ public class AddNewProduct extends javax.swing.JFrame {
         product.setName(txtName.getText());
         product.setCategory(cbCategory.getSelectedItem().toString());
         product.setPrice((txtPrice.getText()));
-        ProductDao.save(product);
+        product.setImg(imagePath);
+        
+        ProductControler.save(product);
         setVisible(false);
         new AddNewProduct().setVisible(true);
     }//GEN-LAST:event_btnSaveActionPerformed
@@ -220,6 +223,7 @@ public class AddNewProduct extends javax.swing.JFrame {
 
     public ImageIcon resizePic(String path) {
         ImageIcon myImg = new ImageIcon(path);
+        
         Image img = myImg.getImage().getScaledInstance(labelPicture.getWidth(), labelPicture.getHeight(), Image.SCALE_SMOOTH);
         ImageIcon myPicture = new ImageIcon(img);
 
@@ -232,57 +236,40 @@ public class AddNewProduct extends javax.swing.JFrame {
         JFileChooser filec = new JFileChooser();
         filec.setCurrentDirectory(new File(System.getProperty("user.home")));
 
-        FileNameExtensionFilter fileFilter = new FileNameExtensionFilter("*.Images", "jpg", "png", "gif");
+        FileNameExtensionFilter fileFilter = new FileNameExtensionFilter("*.Images", "jpg", "png", "gif","jpeg");
         filec.addChoosableFileFilter(fileFilter);
 
         int fileState = filec.showSaveDialog(null);
         if (fileState == JFileChooser.APPROVE_OPTION) {
             File selectedFile = filec.getSelectedFile();
             String path = selectedFile.getAbsolutePath();
-            imagePath = path;
-            labelPicture.setIcon(resizePic(path));
+            String fileName = selectedFile.getName();
+            String destDirPath = "src/images/products/";
+
+            File destDir = new File(destDirPath);
+            if (!destDir.exists()) {
+                destDir.mkdirs(); // Create directory and any necessary parent directories
+                System.out.println("success");
+            }
+
+            String destPath = destDirPath + fileName;
+            try {
+                Files.copy(selectedFile.toPath(), Paths.get(destPath), StandardCopyOption.REPLACE_EXISTING);
+                imagePath = fileName;
+                labelPicture.setIcon(resizePic(destPath));
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+            
         } //        if user cancel
         else if (fileState == JFileChooser.CANCEL_OPTION) {
             System.out.println("No Image Selected");
         }
-
-
     }//GEN-LAST:event_btnBrowerActionPerformed
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AddNewProduct.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AddNewProduct.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AddNewProduct.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AddNewProduct.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new AddNewProduct().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBrower;

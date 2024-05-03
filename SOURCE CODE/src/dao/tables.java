@@ -15,7 +15,7 @@ public class tables {
         
         try{
             String userTable = "create table user(id int AUTO_INCREMENT primary key, name varchar(200), email varchar(200), mobileNumber varchar(10), address varchar(200), password varchar(200), securityQuestion varchar(200), answer varchar(200), status varchar(20),UNIQUE (email))";
-            String adminDetails = "INSERT INTO user (name, email, mobileNumber, address, password, securityQuestion, answer, status) VALUES ('Admin', 'IT@cook.li', '1234567890', 'VietName', 'admin', 'What primary school did you attend?', 'TDTU', 'true')";
+            String adminDetails = "INSERT INTO user (name, email, mobileNumber, address, password, securityQuestion, answer, status) VALUES ('Admin', 'IT@cock.li', '0357853366', 'VietNam', 'admin', 'What primary school did you attend?', 'TDTU', 'true')";
             
             String categoryTable = "Create table category (id int AUTO_INCREMENT primary key, name varchar(200))";
             
@@ -26,7 +26,7 @@ public class tables {
 //            DbOperations.setDataOrDelete(adminDetails, "Admin Details Added Successfully");
 //            DbOperations.setDataOrDelete(categoryTable, "Category Table created Successfully");
 //            DbOperations.setDataOrDelete(productTable, "Product Table Created Successfully");
-            DbOperations.setDataOrDelete(billTable, "Bill Table Created Successfully");
+//            DbOperations.setDataOrDelete(billTable, "Bill Table Created Successfully");
 
 
         }

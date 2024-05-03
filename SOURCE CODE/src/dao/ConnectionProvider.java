@@ -12,7 +12,7 @@ public class ConnectionProvider {
     public static Connection getCon(){
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:8080/ITCoffeeSystem?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "DuyKhanh123");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/ITCoffeeSystem?zeroDateTimeBehavior=CONVERT_TO_NULL", "root", "");
             return con;
         }
         catch(Exception e){

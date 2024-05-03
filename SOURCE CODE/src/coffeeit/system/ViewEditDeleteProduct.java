@@ -4,10 +4,11 @@
  */
 package coffeeit.system;
 
-import dao.CategoryDao;
-import javax.swing.JComboBox;
+
+import controler.CategoryControler;
 import model.Product;
-import dao.ProductDao;
+import controler.ProductControler;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import javax.swing.JOptionPane;
@@ -26,20 +27,24 @@ public class ViewEditDeleteProduct extends javax.swing.JFrame {
      */
     public ViewEditDeleteProduct() {
         initComponents();
+        txtName.setEditable(false);
+        txtPrice.setEditable(false);
         btnSave.setEnabled(false);
         btnDelete.setEnabled(false);
     }
     
     public void validateField(){
-        String name = txtName.getText();
-        String price = txtPrice.getText();
-        String category = cbCategory.getSelectedItem().toString();
-        
-        if(!name.equals("") && !price.equals("") && category != null){
-            btnSave.setEnabled(true);
-        }
-        else
-            btnSave.setEnabled(false);
+        if( txtName.isEditable() && txtPrice.isEditable()){
+            String name = txtName.getText();
+            String price = txtPrice.getText();
+            String category = cbCategory.getSelectedItem().toString();
+
+            if(!name.equals("") && !price.equals("") && category != null){
+                btnSave.setEnabled(true);
+            }
+            else
+                btnSave.setEnabled(false);
+            }        
     }
 
     /**
@@ -201,7 +206,7 @@ public class ViewEditDeleteProduct extends javax.swing.JFrame {
         product.setName(txtName.getText());
         product.setCategory(cbCategory.getSelectedItem().toString());
         product.setPrice(txtPrice.getText());
-        ProductDao.update(product);
+        ProductControler.update(product);
         setVisible(false);
         new ViewEditDeleteProduct().setVisible(true);
     }//GEN-LAST:event_btnSaveActionPerformed
@@ -225,7 +230,7 @@ public class ViewEditDeleteProduct extends javax.swing.JFrame {
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
         // TODO add your handling code here:
         DefaultTableModel dtm = (DefaultTableModel) jTable1.getModel();
-        ArrayList<Product> list = ProductDao.getAllRecords();
+        ArrayList<Product> list = ProductControler.getAllRecords();
         Iterator<Product> itr = list.iterator();
         
         while(itr.hasNext()){
@@ -256,7 +261,9 @@ public class ViewEditDeleteProduct extends javax.swing.JFrame {
         btnDelete.setEnabled(true);
         cbCategory.removeAllItems();
         cbCategory.addItem(category);
-        ArrayList<Category> categoryList = CategoryDao.getAllRecords();
+        txtName.setEditable(true);
+        txtPrice.setEditable(true);
+        ArrayList<Category> categoryList = CategoryControler.getAllRecords();
         Iterator<Category> categoryTtr = categoryList.iterator();
         
         while(categoryTtr.hasNext()){
@@ -273,7 +280,7 @@ public class ViewEditDeleteProduct extends javax.swing.JFrame {
         int a = JOptionPane.showConfirmDialog(null, "Do you want to delete Product","Select",JOptionPane.YES_NO_OPTION);
         
         if(a == 0){
-            ProductDao.delete(id);
+            ProductControler.delete(id);
             setVisible(false);
             new ViewEditDeleteProduct().setVisible(true);
         }
@@ -282,37 +289,7 @@ public class ViewEditDeleteProduct extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ViewEditDeleteProduct.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ViewEditDeleteProduct.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ViewEditDeleteProduct.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ViewEditDeleteProduct.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ViewEditDeleteProduct().setVisible(true);
-            }
-        });
-    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClear;

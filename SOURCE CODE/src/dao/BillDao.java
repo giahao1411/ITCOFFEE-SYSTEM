@@ -3,7 +3,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package dao;
-import java.security.interfaces.RSAKey;
 import java.sql.*;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
@@ -22,7 +21,6 @@ public class BillDao {
                 id = rs.getInt(1);
                 id += 1;
             }
-            
             
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
