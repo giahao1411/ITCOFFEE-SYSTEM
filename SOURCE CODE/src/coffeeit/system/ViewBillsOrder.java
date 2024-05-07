@@ -180,7 +180,10 @@ public class ViewBillsOrder extends javax.swing.JFrame {
         int index = jTable1.getSelectedRow();
         TableModel model = jTable1.getModel();
         String id = model.getValueAt(index, 0).toString();
-        OpenPdf.openById(id);
+        String[] dateComponent = id.split("/");
+        String impPath = dateComponent[0] + dateComponent[1] + dateComponent[2];
+        
+        OpenPdf.openById(impPath);
     }//GEN-LAST:event_jTable1MouseClicked
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown

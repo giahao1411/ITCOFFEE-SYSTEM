@@ -7,31 +7,55 @@ import java.sql.*;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import model.Bill;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 /**
  *
  * @author Win
  */
 public class BillDao {
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+    
     public static String getId(){
-        int id = 1;
+        int billNumber = 1;
+        Date date = new Date();
+        String formattedDate = dateFormat.format(date);
+        String id = "HD-" + formattedDate + "-" + String.format("%04d", billNumber);
+        
         try {
-            String query = "select max(id) from bill";
+            String query = "SELECT id FROM bill ORDER BY STR_TO_DATE(SUBSTRING_INDEX(id, '-', -1), '%d/%m/%Y') DESC, id DESC LIMIT 1";
+
             ResultSet rs = DbOperations.getData(query);
             if(rs.next()){
-                id = rs.getInt(1);
-                id += 1;
+                id = rs.getString(1);
+                if(id.split("-")[1].equals(formattedDate)){
+                    billNumber = Integer.parseInt(id.split("-")[2]) + 1;
+                }
+                id = "HD-" + formattedDate + "-" + String.format("%04d", billNumber);
             }
             
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
         }
         
-        return String.valueOf(id);
+        return id;
+    }
+    
+    public static void main(String[] args) {
+        System.out.println(getId());
+        Bill bill = new Bill();
+        bill.setId(getId());
+        save(bill);
     }
     
     public static void save(Bill bill){
-        String query = "Insert into bill values("+ bill.getId() + ",'" +  bill.getName()+ "','" + bill.getMobileNumber()+ "','" + bill.getEmail()+ "','" + bill.getDate() + "','" + bill.getTotal() + "','" + bill.getCreateBy()+"')";
-        DbOperations.setDataOrDelete(query, "Bill created successfully!");
+        try {
+            String query = "Insert into bill values('"+ bill.getId() + "','" +  bill.getName() + "','" + bill.getMobileNumber()+ "','" + bill.getEmail()+ "','" + bill.getDate() + "','" + bill.getTotal() + "','" + bill.getCreateBy()+"')";
+            DbOperations.setDataOrDelete(query, "Bill created successfully!");
+        } catch (Exception e) {
+             JOptionPane.showMessageDialog(null, e);
+        }
+       
     }
     
     
@@ -42,7 +66,7 @@ public class BillDao {
             ResultSet rs = DbOperations.getData(query);
             while(rs.next()){
                 Bill bill = new Bill();
-                bill.setId(rs.getInt("id"));
+                bill.setId(rs.getString("id"));
                 bill.setName(rs.getString("name"));
                 bill.setMobileNumber(rs.getString("mobileNumber"));
                 bill.setEmail(rs.getString("email"));
@@ -65,7 +89,7 @@ public class BillDao {
             ResultSet rs = DbOperations.getData(query);
             while(rs.next()){
                 Bill bill = new Bill();
-                bill.setId(rs.getInt("id"));
+                bill.setId(rs.getString("id"));
                 bill.setName(rs.getString("name"));
                 bill.setMobileNumber(rs.getString("mobileNumber"));
                 bill.setEmail(rs.getString("email"));

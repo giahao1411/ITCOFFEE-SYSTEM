@@ -35,7 +35,7 @@ public class PlaceOrder extends javax.swing.JFrame {
 
     public String userEmail;
     public int grandTotal = 0;
-    public int billId = Integer.parseInt(BillControler.getId());
+    public String billId = BillControler.getId();
     public int productPrice = 0;
     public String emailPattern = "^[a-zA-Z0-9]+[@]+[a-zA-Z0-9]+[.]+[a-zA-Z0-9]+$";
     public String mobileNumberPattern = "^[0-9]*$";
@@ -551,7 +551,7 @@ public class PlaceOrder extends javax.swing.JFrame {
 
     private void formComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentShown
         // TODO add your handling code here:
-        billId = Integer.parseInt(BillControler.getId());
+        billId = BillControler.getId();
         ItemCost();
     }//GEN-LAST:event_formComponentShown
 
@@ -566,7 +566,7 @@ public class PlaceOrder extends javax.swing.JFrame {
     }//GEN-LAST:event_btnPayActionPerformed
 
     private void clear() {
-        billId = Integer.parseInt(BillControler.getId());
+        billId = BillControler.getId();
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0);
         txtChange.setText("");
@@ -608,15 +608,18 @@ public class PlaceOrder extends javax.swing.JFrame {
         bill.setDate(time + " " + date);
         bill.setTotal(txtTotal.getText());
         bill.setCreateBy(createBy);
-
+        
         BillControler.save(bill);
 
         String path = "E:\\";
 
         com.itextpdf.text.Document document = new com.itextpdf.text.Document();
-
+        
+        String[] dateComponent = billId.split("/");
+        String impPath = dateComponent[0] + dateComponent[1] + dateComponent[2];
+        
         try {
-            PdfWriter.getInstance(document, new FileOutputStream(path + "" + billId + ".pdf"));
+            PdfWriter.getInstance(document, new FileOutputStream(path + "" + impPath + ".pdf"));
             document.open();
 
             Font font = FontFactory.getFont(FontFactory.HELVETICA, 20);
@@ -675,7 +678,7 @@ public class PlaceOrder extends javax.swing.JFrame {
             thankMsg.setAlignment(Paragraph.ALIGN_CENTER);
             document.add(thankMsg);
 
-            OpenPdf.openById(String.valueOf(billId));
+            OpenPdf.openById(impPath);
 
         } catch (Exception e) {
             e.printStackTrace();
