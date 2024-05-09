@@ -4,8 +4,6 @@
  */
 package coffeeit.system;
 
-import javax.swing.ImageIcon;
-
 /**
  *
  * @author Win
@@ -16,7 +14,7 @@ public class CoffeeITSystem {
      * @param args the command line arguments
      */
     
-//    ImageIcon logo = new ImageIcon("images/coffee-icon.webp");
+
     
     
     

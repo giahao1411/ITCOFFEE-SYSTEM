@@ -41,13 +41,6 @@ public class BillDao {
         return id;
     }
     
-    public static void main(String[] args) {
-        System.out.println(getId());
-        Bill bill = new Bill();
-        bill.setId(getId());
-        save(bill);
-    }
-    
     public static void save(Bill bill){
         try {
             String query = "Insert into bill values('"+ bill.getId() + "','" +  bill.getName() + "','" + bill.getMobileNumber()+ "','" + bill.getEmail()+ "','" + bill.getDate() + "','" + bill.getTotal() + "','" + bill.getCreateBy()+"')";
