@@ -88,10 +88,10 @@ public class ViewBillsOrder extends javax.swing.JFrame {
         });
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setBackground(new java.awt.Color(0, 0, 0));
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/View Bills & Order Placed Details.png"))); // NOI18N
-        jLabel1.setText("View Bill's Details");
+        jLabel1.setText("View Bills & Order Placed Details");
         getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 6, -1, -1));
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); // NOI18N
@@ -102,9 +102,9 @@ public class ViewBillsOrder extends javax.swing.JFrame {
         });
         getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1314, 9, -1, -1));
 
-        jLabel3.setBackground(new java.awt.Color(0, 0, 0));
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel3.setText("ORDER BY DATE");
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("Fillter by Date");
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(181, 145, -1, -1));
 
         txtGetDate.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -115,10 +115,10 @@ public class ViewBillsOrder extends javax.swing.JFrame {
         });
         getContentPane().add(txtGetDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(348, 142, 348, -1));
 
-        jLabel4.setBackground(new java.awt.Color(0, 0, 0));
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabel4.setText("ORDER BY ID");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 150, -1, -1));
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setText("Change Order By ID");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(779, 145, -1, -1));
 
         cbIncDesc.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         cbIncDesc.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "INC", "DESC" }));
@@ -152,8 +152,7 @@ public class ViewBillsOrder extends javax.swing.JFrame {
         jLabel2.setText("*Click On Row To Open Bill");
         getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(449, 698, -1, -1));
 
-        jLabel5.setBackground(new java.awt.Color(0, 0, 0));
-        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/full-page-background.PNG.png"))); // NOI18N
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/full-page-background.PNG"))); // NOI18N
         jLabel5.setText("jLabel5");
         getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1370, -1));
 
